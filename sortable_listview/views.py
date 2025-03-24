@@ -28,6 +28,10 @@ class SortableListView(ListView):
     del_query_parameters = ['page']  # get paramaters we don't want to preserve
     # End of Defaults
 
+    sort_order:str = None
+    sort_field:str = None
+    sort_link_list:list[dict] = None
+
     def __init__(self, *args, **kwargs):
         """
         Convert allowed_sort_fields to an OrderedDict data structure to preserve
@@ -126,7 +130,7 @@ class SortableListView(ListView):
         if not sort_field in self._allowed_sort_fields:
             sort_order = self.default_sort_order
             sort_field = self.default_sort_field
-        return (sort_order, sort_field)
+        return sort_order, sort_field
 
     def get_sort_string(self, sort=None):
         if not sort:
@@ -141,7 +145,7 @@ class SortableListView(ListView):
         If we're already sorted by the field then the sort query
         returned reverses the sort order.
         """
-        # self.sort_field is the currect sort field
+        # self.sort_field is the current sort field
         if field == self.sort_field:
             next_sort = self.toggle_sort_order() + field
         else:
@@ -153,7 +157,7 @@ class SortableListView(ListView):
     def get_sort_indicator(self, field):
         """
         Returns a sort class for the active sort only. That is, if field is not
-        sort_field, then nothing will be returned becaues the sort is not
+        sort_field, then nothing will be returned because the sort is not
         active.
         """
         indicator = ''
@@ -164,6 +168,7 @@ class SortableListView(ListView):
         return indicator
 
     def toggle_sort_order(self):
+        toggled_sort_order = ''
         if self.sort_order == '-':
             toggled_sort_order = ''
         if self.sort_order == '':

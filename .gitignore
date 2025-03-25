@@ -1,3 +1,7 @@
+# Python bytecode
+build/
+
+# Python byte code
 *.py[cod]
 
 # Packages
